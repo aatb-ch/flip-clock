@@ -13,11 +13,15 @@ display_width = panel_width * 2
 display_height = 7
 
 sec_max = 60
+sec_width = 1
 min_max = 60
+min_width = 2
 hour_max = 24
+hour_width = 3
 week_max = 7
+week_width = 8
 # month_max ### depends
-# year_max  ### depends
+# year_max  ### depends1
 
 class Display:
 	def __init__(self):
@@ -27,7 +31,7 @@ class Display:
 			for icol in range(display_width):
 				row.append(0)
 			self.display_array.append(row)
-	
+
 	def __repr__(self):
 		border_line = '-' * (display_width + 2)
 		string_repr = border_line + '\n'
@@ -36,11 +40,11 @@ class Display:
 			string_repr += '|'  + row + '|\n'
 		string_repr += border_line
 		return string_repr
-	
+
 	def to_bytes(self, packets):
-		for icol in range(display_width):
-			byte = sum([self.display_array[i][icol] * 2**(i) for i in range(display_height)])
-			panel = 0 if icol < panel_width else 1
+		for icol in range(display_width-1, -1, -1):
+			byte = sum([self.display_array[i][icol] * 2**(display_height-i-1) for i in range(display_height)])
+			panel = 1 if icol < panel_width else 0
 			packets[panel].append(byte)
 		return packets
 
@@ -50,6 +54,11 @@ if use_serial: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
 def convert_to_pixel_val(part):
 	return math.floor(part * display_width)
 
+def convert_to_pixel_range(part, width):
+	low =  max(0, round(part * display_width - width/2))
+	high = min(round(part * display_width + width/2), display_width-1)
+	return low, high
+
 prev_time = datetime.datetime.fromtimestamp(0)
 while True:
 	disp = Display()
@@ -57,13 +66,17 @@ while True:
 	if not int(curr_time.timestamp()) == int(prev_time.timestamp()):
 		sec = curr_time.second
 		sec_part = convert_to_pixel_val(sec / sec_max)
+		sec_parts = convert_to_pixel_range(sec / sec_max, sec_width)
 		mins = curr_time.minute
 		min_part = convert_to_pixel_val(mins / min_max)
+		min_parts = convert_to_pixel_range(mins / min_max, min_width)
 		hour = curr_time.hour
 		hour_part = convert_to_pixel_val(hour / hour_max)
+		hour_parts = convert_to_pixel_range(hour / hour_max, hour_width)
 
 		week = curr_time.isoweekday()
 		week_part = convert_to_pixel_val(week / week_max)
+		week_parts = convert_to_pixel_range(week / week_max, week_width)
 
 		month = curr_time.month
 		year = curr_time.year
@@ -76,14 +89,18 @@ while True:
 		year_part = convert_to_pixel_val(day_of_year / year_max)
 
 		# generate output
-		for i in range(sec_part):
+		# for i in range(sec_part):
+		# 	disp.display_array[0][i] = 1
+		for i in range(*sec_parts):
 			disp.display_array[0][i] = 1
-		for i in range(min_part):
+		#for i in range(min_part):
+		#	disp.display_array[1][i] = 1
+		for i in range(*min_parts):
 			disp.display_array[1][i] = 1
-		for i in range(hour_part):
+		for i in range(*hour_parts):
 			disp.display_array[2][i] = 1
-		for i in range(week_part):
-			disp.display_array[4][i] = 1
+		for i in range(*week_parts):
+			disp.display_array[3][i] = 1
 		for i in range(month_part):
 			disp.display_array[5][i] = 1
 		for i in range(year_part):
