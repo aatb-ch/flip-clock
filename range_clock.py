@@ -5,7 +5,7 @@ import time
 import math
 import calendar
 
-use_serial = False
+use_serial = True
 show_debug = True
 
 panel_width = 28
@@ -93,22 +93,21 @@ while True:
 
 		prev_time = curr_time
 
+		packets = [bytearray(), bytearray()]
+		for i, p in enumerate(packets):
+			p.append(0x80) # start frame
+			p.append(0x83) # display data
+			p.append(i) # module id
 
-	packets = [bytearray(), bytearray()]
-	for p in packets:
-		p.append(0x80) # start frame
-		p.append(0x83) # display data
-		p.append(0x00) # module id
-		
-	packets = disp.to_bytes(packets)
+		packets = disp.to_bytes(packets)
 
-	for p in packets:
-		p.append(0x8f) # end of frame
-
-	if use_serial:
 		for p in packets:
-			ser.write(p)
-		
+			p.append(0x8f) # end of frame
+
+		if use_serial:
+			for p in packets:
+				ser.write(p)
+
 	time.sleep(0.1)
 
 if use_serial: 
