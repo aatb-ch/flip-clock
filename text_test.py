@@ -7,7 +7,7 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
 
 panel_width = 28
@@ -27,7 +27,8 @@ with open(font_data_file, 'r') as inp:
 with open(font_data_file, 'r') as inp:
 	char_bytes = json.load(inp)
 
-text = 'ABCDEFG:0123456789'
+# text = 'abcdefghijklmnopqrstuvwxyz:ABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789'
+text = ''.join(char_bytes.keys())
 # convert to byte sequence
 text_bytes = []
 for c in text:
