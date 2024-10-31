@@ -2,10 +2,10 @@ import curses
 
 class FlipdotDisplay:
 	def __init__(self, display_width, display_height, panel_width):
-		self.display_array = []
 		self.display_width = display_width
 		self.display_height = display_height
 		self.panel_width = panel_width
+		self.display_array = []
 		for irow in range(self.display_height):
 			row = []
 			for icol in range(self.display_width):
@@ -20,6 +20,20 @@ class FlipdotDisplay:
 			string_repr += '|'  + row + '|\n'
 		string_repr += border_line
 		return string_repr
+	
+	def update_from_bytes(self, bytes):
+		for ib, b in enumerate(bytes):
+			bits = [int(digit) for digit in f'{b:07b}']
+			for ibit, bit in enumerate(bits):
+				self.display_array[ibit][ib] = bit
+			
+	def clear(self):
+		self.display_array = []
+		for irow in range(self.display_height):
+			row = []
+			for icol in range(self.display_width):
+				row.append(0)
+			self.display_array.append(row)        
 	
 	def print(self):
 		text_display = str(self).split('\n')
