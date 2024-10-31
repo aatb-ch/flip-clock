@@ -9,7 +9,7 @@ from flipdot_display import FlipdotDisplay
 
 add_hour_stripe = False
 use_serial = True
-show_debug = True
+show_debug = False
 
 panel_width = 28
 display_width = panel_width * 2
