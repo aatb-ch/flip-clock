@@ -6,7 +6,9 @@ import math
 import calendar
 import curses
 
-use_serial = True
+from flipdot_display import FlipdotDisplay
+
+use_serial = False
 show_debug = True
 
 panel_width = 28
@@ -23,38 +25,6 @@ week_max = 7
 week_width = 8
 # month_max ### depends
 # year_max  ### depends1
-
-class Display:
-	def __init__(self):
-		self.display_array = []
-		for irow in range(display_height):
-			row = []
-			for icol in range(display_width):
-				row.append(0)
-			self.display_array.append(row)
-
-	def __repr__(self):
-		border_line = '-' * (display_width + 2)
-		string_repr = border_line + '\n'
-		for irow in range(display_height):
-			row = ''.join(map(lambda x: ' ' if x == 0 else '#', self.display_array[irow]))
-			string_repr += '|'  + row + '|\n'
-		string_repr += border_line
-		return string_repr
-	
-	def print(self):
-		text_display = str(disp).split('\n')
-		stdscr = curses.initscr()
-		for i, s in enumerate(text_display):
-			stdscr.addstr(i, 0, s)
-		stdscr.refresh()
-
-	def to_bytes(self, packets):
-		for icol in range(display_width-1, -1, -1):
-			byte = sum([self.display_array[i][icol] * 2**(display_height-i-1) for i in range(display_height)])
-			panel = 1 if icol < panel_width else 0
-			packets[panel].append(byte)
-		return packets
 
 
 if use_serial: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
@@ -75,7 +45,7 @@ def convert_to_pixel_range(part, width):
 
 prev_time = datetime.datetime.fromtimestamp(0)
 while True:
-	disp = Display()
+	disp = FlipdotDisplay(display_width, display_height, panel_width)
 	curr_time = datetime.datetime.now()
 	if not int(curr_time.timestamp()) == int(prev_time.timestamp()):
 		sec = curr_time.second
