@@ -4,6 +4,7 @@ import datetime
 import time
 import math
 import calendar
+import curses
 
 use_serial = True
 show_debug = True
@@ -40,6 +41,13 @@ class Display:
 			string_repr += '|'  + row + '|\n'
 		string_repr += border_line
 		return string_repr
+	
+	def print(self):
+		text_display = str(disp).split('\n')
+		stdscr = curses.initscr()
+		for i, s in enumerate(text_display):
+			stdscr.addstr(i, 0, s)
+		stdscr.refresh()
 
 	def to_bytes(self, packets):
 		for icol in range(display_width-1, -1, -1):
@@ -55,9 +63,15 @@ def convert_to_pixel_val(part):
 	return math.floor(part * display_width)
 
 def convert_to_pixel_range(part, width):
-	low =  max(0, round(part * display_width - width/2))
-	high = min(round(part * display_width + width/2), display_width-1)
-	return low, high
+	main = math.floor(part * display_width)
+	w_half = math.floor(width/2)
+	low =  max(0, main - w_half)
+	if width % 2 == 0:
+		# even width
+		high = min(main + w_half - 1, display_width-1)
+	else:
+		high = min(main + w_half, display_width-1)
+	return low, high+1
 
 prev_time = datetime.datetime.fromtimestamp(0)
 while True:
@@ -106,7 +120,8 @@ while True:
 		for i in range(year_part):
 			disp.display_array[6][i] = 1
 
-		if show_debug: print(disp)
+		if show_debug: 
+			disp.print()
 
 		prev_time = curr_time
 
@@ -126,6 +141,9 @@ while True:
 				ser.write(p)
 
 	time.sleep(0.1)
+
+if show_debug:
+	curses.endwin()
 
 if use_serial: 
 	ser.close()
