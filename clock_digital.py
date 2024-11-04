@@ -9,7 +9,8 @@ from flipdot_display import FlipdotDisplay
 
 add_hour_stripe = False
 use_serial = True
-show_debug = False
+show_debug = True
+add_weekday = True
 
 panel_width = 28
 display_width = panel_width * 2
@@ -67,6 +68,13 @@ while True:
 			for irow in range(7):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 	hour_ind *= -1
+
+	## add weekday
+	if add_weekday:
+		s = now.weekday()
+		for irow in range(6, 6-s-1, -1):
+			for icol in list(range(12)) + list(range(44, disp.display_width)):
+				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	if show_debug: 
 		disp.print()
