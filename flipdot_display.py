@@ -1,3 +1,5 @@
+## Supporting class for the Flipdot display
+
 import curses
 
 class FlipdotDisplay:

@@ -1,3 +1,5 @@
+## clock for time, week, year in form of slices/bars
+
 import serial
 import random
 import datetime

@@ -1,3 +1,5 @@
+## simple digital clock with optional weekday bar
+
 import serial
 import datetime
 import time
