@@ -9,7 +9,7 @@ from flipdot_display import FlipdotDisplay
 
 use_serial = True
 show_debug = True
-max_perc = 0.8
+
 period = 10 # secs
 
 panel_width = 28
@@ -46,10 +46,6 @@ def approximate_prob(p, arr):
 
 start = time.time()
 while True:
-	# disp.clear()
-
-	# perm = list(itertools.product(range(disp.display_width), range(disp.display_height)))
-
 	t = time.time() - start
 
 	strength = (math.sin(t / period * 2 * math.pi) + 1) / 2    # going from 0 to 1
@@ -63,17 +59,6 @@ while True:
 		arr = approximate_prob(prob * scaler, arr)
 		for j in range(disp.display_height):
 			disp.display_array[j][i] = arr[j]
-
-	# strength = (math.sin(t / period * 2 * math.pi) + 1) / 2    # going from 0 to 1
-	# mu = disp.display_width/2
-	# sigma = 3.0 + 15.0 * strength
-	# scaler = 0.2 + strength *0.8
-	# bytes = []
-	# for i in range(disp.display_width):
-	# 	prob = pdf(i, mu, sigma)
-	# 	for j in range(disp.display_height):
-	# 		if random.random() < prob:
-	# 			disp.display_array[j][i] = 1
 
 	disp.print()
 
