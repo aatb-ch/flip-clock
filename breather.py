@@ -79,62 +79,6 @@ while True:
 
 	time.sleep(0.1)
 
-	# # inhale = True
-	# start = time.time()
-	# while True:
-
-	# 	# disp.update_from_bytes(bytes)
-
-	# 	# prob = (math.sin(t / period * 2 * math.pi) + 1) / 2
-
-	# 	# for i in range(disp.display_width):
-	# 	# 	for j in range(disp.display_height):
-	# 	# 		if random.random() <= prob:
-	# 	# 			disp.display_array[j][i] = 1
-	# 	# 		else:
-	# 	# 			disp.display_array[j][i] = 0
-		
-	# 	disp.print()
-
-	# 	# # random.shuffle(perm)
-	# 	# # if inhale:
-	# 	# # 	for i in range(round(len(perm) * max_perc)):
-	# 	# # 		p = perm[i]
-	# 	# # 		disp.display_array[p[1]][p[0]] = 1
-	# 	# # 		disp.print()
-	# 	# # 		time.sleep(0.02)
-
-	# 	# # 	inhale = False
-	# 	# # else:
-	# 	# # 	# random.shuffle(perm)
-	# 	# # 	for i in range(round(len(perm) * max_perc)):
-	# 	# # 		p = perm[i]
-	# 	# # 		disp.display_array[p[1]][p[0]] = 0
-	# 	# # 		disp.print()
-	# 	# # 		time.sleep(0.02)
-
-	# 	# # 	inhale = True
-
-	# 	# # if show_debug: 
-	# 	# # 	disp.print()
-
-	# 	# # packets = [bytearray(), bytearray()]
-	# 	# # for i, p in enumerate(packets):
-	# 	# # 	p.append(0x80) # start frame
-	# 	# # 	p.append(0x83) # display data
-	# 	# # 	p.append(i) # module id
-
-	# 	# # packets = disp.to_bytes(packets)
-
-	# 	# # for p in packets:
-	# 	# # 	p.append(0x8f) # end of frame
-
-	# 	# # if use_serial:
-	# 	# # 	for p in packets:
-	# 	# # 		ser.write(p)
-
-
-
 if show_debug:
 	curses.endwin()
 
