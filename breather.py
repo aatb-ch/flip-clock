@@ -7,7 +7,7 @@ import math
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
 max_perc = 0.8
 period = 10 # secs
