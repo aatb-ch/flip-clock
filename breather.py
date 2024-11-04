@@ -1,7 +1,9 @@
+### breathing pattern
+# freq could be controlled by some external quantity? 
+
 import serial
 import time
 import curses
-import itertools
 import random
 import math
 
