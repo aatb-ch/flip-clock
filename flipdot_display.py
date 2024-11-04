@@ -50,3 +50,18 @@ class FlipdotDisplay:
 			panel = 1 if icol < self.panel_width else 0
 			packets[panel].append(byte)
 		return packets
+	
+	def send_to_display(self, ser):
+		packets = [bytearray(), bytearray()]
+		for i, p in enumerate(packets):
+			p.append(0x80) # start frame
+			p.append(0x83) # display data
+			p.append(i) # module id
+
+		packets = self.to_bytes(packets)
+
+		for p in packets:
+			p.append(0x8f) # end of frame
+
+		for p in packets:
+			ser.write(p)
