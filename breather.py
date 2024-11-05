@@ -63,6 +63,7 @@ while True:
 			disp.display_array[j][i] = arr[j]
 
 	disp.print()
+	disp.send_to_display(ser)
 
 	time.sleep(0.1)
 

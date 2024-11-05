@@ -9,7 +9,7 @@ import math
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
 
 panel_width = 28
@@ -71,12 +71,14 @@ while True:
 	# disp.clear()
 
 	disp.print()
+	disp.send_to_display(ser)
 	changes = ca_step()
 
 	if changes < 8 or frame > 200:
 		frame = 0
 		disp.clear()
 		disp.print()
+		disp.send_to_display(ser)
 		time.sleep(1)
 		init()
 

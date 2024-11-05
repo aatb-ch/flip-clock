@@ -10,7 +10,7 @@ from wave_simulation.simulation import Simulation, Drop
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
 
 panel_width = 28
@@ -41,6 +41,7 @@ while True:
 					disp.display_array[j][i] = 1
 
 	disp.print()
+	if use_serial: disp.send_to_display(ser)
 
 	time.sleep(0.1)
 

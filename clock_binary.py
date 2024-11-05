@@ -17,9 +17,9 @@ display_width = panel_width * 2
 display_height = 7
 
 ## geometry
-x_grid = 5 # horizontal spacing
-x_start = round((58 - 6 * x_grid) / 2)
-x_width = 4
+x_grid = 9 # horizontal spacing
+x_start = round((56 - 6 * x_grid) / 2)
+x_width = 8
 y_hour = 4 # vertical size hour
 y_mins = 2 # vertical size mins
 y_secs = 1 # vertical size secs
