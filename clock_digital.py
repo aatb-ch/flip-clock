@@ -1,4 +1,4 @@
-## simple digital clock with optional weekday bar
+## simple digital clock with optional additions
 
 import serial
 import datetime
@@ -17,9 +17,10 @@ add_year_part = False
 add_month_part = False
 add_hour_stripe = False
 add_hour_bar = False
-do_inverting = True 
+do_inverting = False 
 inversion_interval = 20 *60 # seconds
 is_inverted = False
+add_day_dots = True
 
 panel_width = 28
 display_width = panel_width * 2
@@ -55,14 +56,16 @@ def convert_to_pixel_range(part, width):
 def invert_horizontally():
 	for icol in range(disp.display_width):
 		for irow in range(disp.display_height):
-			if disp.display_array[irow][icol] > 0.1:
-				disp.display_array[irow][icol] = 0  
-			else:
-				disp.display_array[irow][icol] = 1
+			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 		disp.print()
 		if use_flipdot:
 			disp.send_to_display(ser)
 		time.sleep(0.001)
+
+def invert_value(x):
+	if x > 0.1:
+		return 0  
+	return 1 
 
 hour_ind = 1
 while True:
@@ -141,6 +144,13 @@ while True:
 		if should_be_inverted != is_inverted:
 			invert_horizontally()
 			is_inverted = not is_inverted
+	
+	if add_day_dots:
+		secs = now.hour * 60 * 60 + now.minute * 60 + now.second
+		secs_part = convert_to_pixel_val(secs / 86400, disp.display_height * disp.display_width)
+		for i in range(secs_part):
+			irow, icol = divmod(i, disp.display_width)
+			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 
 	if show_debug: 
 		disp.print()
