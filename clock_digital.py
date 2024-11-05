@@ -146,8 +146,10 @@ while True:
 			is_inverted = not is_inverted
 	
 	if add_day_dots:
-		secs = now.hour * 60 * 60 + now.minute * 60 + now.second
-		secs_part = convert_to_pixel_val(secs / 86400, disp.display_height * disp.display_width)
+		# secs = now.hour * 60 * 60 + now.minute * 60 + now.second
+		# secs_part = convert_to_pixel_val(secs / 86400, disp.display_height * disp.display_width)
+		secs = now.minute * 60 + now.second
+		secs_part = convert_to_pixel_val(secs / 3600, disp.display_height * disp.display_width)
 		for i in range(secs_part):
 			irow, icol = divmod(i, disp.display_width)
 			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
