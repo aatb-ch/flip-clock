@@ -2,6 +2,15 @@
 
 import curses
 
+FULL_BLOCK = chr(0x2588)
+SQUARE = chr(0x2593) #chr(0x258a)
+LINE_HZ = chr(0x2500) # horiz line
+LINE_VT = chr(0x2502) # vert line
+CORNER_TL = chr(0x250c) # corner tl
+CORNER_TR = chr(0x2510) # corner tr
+CORNER_BL = chr(0x2514) # corner bl
+CORNER_BR = chr(0x2518) # corner br
+
 class FlipdotDisplay:
 	def __init__(self, display_width, display_height, panel_width):
 		self.display_width = display_width
@@ -15,12 +24,13 @@ class FlipdotDisplay:
 			self.display_array.append(row)
 
 	def __repr__(self):
-		border_line = '-' * (self.display_width + 2)
-		string_repr = border_line + '\n'
+		border_line_top = CORNER_TL + LINE_HZ * (self.display_width) + CORNER_TR
+		string_repr = border_line_top + '\n'
 		for irow in range(self.display_height):
-			row = ''.join(map(lambda x: ' ' if x == 0 else '#', self.display_array[irow]))
-			string_repr += '|'  + row + '|\n'
-		string_repr += border_line
+			row = ''.join(map(lambda x: ' ' if x == 0 else SQUARE, self.display_array[irow]))
+			string_repr += LINE_VT  + row + LINE_VT + '\n'
+		border_line_bottom = CORNER_BL + LINE_HZ * (self.display_width) + CORNER_BR
+		string_repr += border_line_bottom
 		return string_repr
 	
 	def update_from_bytes(self, bytes):
