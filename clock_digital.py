@@ -82,7 +82,7 @@ while True:
 		s = now.weekday()
 		for irow in range(6, 6-s-1, -1):
 			# for icol in list(range(12)) + list(range(44, disp.display_width)):
-			for icol in list(range(50, disp.display_width)):
+			for icol in list(range(51, disp.display_width)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	## add year_part
@@ -93,7 +93,7 @@ while True:
 		year_max = 366 if is_leap else 365
 		year_part = convert_to_pixel_val(day_of_year / year_max, disp.display_height)
 		for irow in range(6, 6-year_part-1, -1):
-			for icol in list(range(4)):
+			for icol in list(range(2)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	## add month_part
@@ -103,7 +103,7 @@ while True:
 		day_of_month = now.day
 		month_part = convert_to_pixel_val(day_of_month / month_max, disp.display_height)
 		for irow in range(6, 6-month_part-1, -1):
-			for icol in list(range(5, 9)):
+			for icol in list(range(3, 5)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	if show_debug: 
