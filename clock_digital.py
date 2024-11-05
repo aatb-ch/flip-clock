@@ -12,11 +12,11 @@ from flipdot_display import FlipdotDisplay
 
 use_serial = True
 show_debug = True
-add_weekday = False
-add_year_part = False
-add_month_part = False
+add_weekday = True
+add_year_part = True
+add_month_part = True
 add_hour_stripe = False
-add_hour_bar = True
+add_hour_bar = False
 
 panel_width = 28
 display_width = panel_width * 2
@@ -83,7 +83,7 @@ while True:
 		s = now.weekday()
 		for irow in range(6, 6-s-1, -1):
 			# for icol in list(range(12)) + list(range(44, disp.display_width)):
-			for icol in list(range(51, disp.display_width)):
+			for icol in list(range(47, disp.display_width)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	## add year_part
@@ -94,7 +94,7 @@ while True:
 		year_max = 366 if is_leap else 365
 		year_part = convert_to_pixel_val(day_of_year / year_max, disp.display_height)
 		for irow in range(6, 6-year_part-1, -1):
-			for icol in list(range(2)):
+			for icol in list(range(4)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	## add month_part
@@ -104,7 +104,7 @@ while True:
 		day_of_month = now.day
 		month_part = convert_to_pixel_val(day_of_month / month_max, disp.display_height)
 		for irow in range(6, 6-month_part-1, -1):
-			for icol in list(range(3, 5)):
+			for icol in list(range(5, 9)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	## add hour_bar
