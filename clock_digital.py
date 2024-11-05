@@ -12,10 +12,11 @@ from flipdot_display import FlipdotDisplay
 
 use_serial = True
 show_debug = True
-add_weekday = True
-add_year_part = True
-add_month_part = True
+add_weekday = False
+add_year_part = False
+add_month_part = False
 add_hour_stripe = False
+add_hour_bar = True
 
 panel_width = 28
 display_width = panel_width * 2
@@ -104,6 +105,14 @@ while True:
 		month_part = convert_to_pixel_val(day_of_month / month_max, disp.display_height)
 		for irow in range(6, 6-month_part-1, -1):
 			for icol in list(range(3, 5)):
+				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
+
+	## add hour_bar
+	if add_hour_bar:
+		hour_part = (now.hour * 60 + now.minute) / 24 / 60
+		hour_pix = convert_to_pixel_val(hour_part, disp.display_width)
+		for icol in range(hour_pix):
+			for irow in range(7):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	if show_debug: 
