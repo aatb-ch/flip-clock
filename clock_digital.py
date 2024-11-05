@@ -3,16 +3,19 @@
 import serial
 import datetime
 import time
+import calendar
 import math
 import curses
 import json
 
 from flipdot_display import FlipdotDisplay
 
-add_hour_stripe = False
 use_serial = True
 show_debug = True
 add_weekday = True
+add_year_part = True
+add_month_part = True
+add_hour_stripe = False
 
 panel_width = 28
 display_width = panel_width * 2
@@ -30,6 +33,9 @@ with open(font_data_file, 'r') as inp:
 	char_data = json.load(inp)
 with open(font_data_file, 'r') as inp:
 	char_bytes = json.load(inp)
+
+def convert_to_pixel_val(part, full):
+	return math.floor(part * full)
 
 def convert_to_pixel_range(part, width):
 	main = math.floor(part * display_width)
@@ -75,7 +81,29 @@ while True:
 	if add_weekday:
 		s = now.weekday()
 		for irow in range(6, 6-s-1, -1):
-			for icol in list(range(12)) + list(range(44, disp.display_width)):
+			# for icol in list(range(12)) + list(range(44, disp.display_width)):
+			for icol in list(range(50, disp.display_width)):
+				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
+
+	## add year_part
+	if add_year_part:
+		day_of_year = now.timetuple().tm_yday
+		year = now.year
+		is_leap = calendar.isleap(year)
+		year_max = 366 if is_leap else 365
+		year_part = convert_to_pixel_val(day_of_year / year_max, disp.display_height)
+		for irow in range(6, 6-year_part-1, -1):
+			for icol in list(range(4)):
+				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
+
+	## add month_part
+	if add_month_part:
+		month = now.month
+		month_max = calendar.monthrange(year, month)[1]
+		day_of_month = now.day
+		month_part = convert_to_pixel_val(day_of_month / month_max, disp.display_height)
+		for irow in range(6, 6-month_part-1, -1):
+			for icol in list(range(5, 9)):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	if show_debug: 
