@@ -10,7 +10,7 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_flipdot = True
 show_debug = True
 add_weekday = False
 add_year_part = False
@@ -18,6 +18,7 @@ add_month_part = False
 add_hour_stripe = False
 add_hour_bar = False
 do_inverting = True 
+inversion_interval = 20   ### TODO *60 # seconds
 is_inverted = False
 
 panel_width = 28
@@ -27,7 +28,7 @@ display_height = 7
 font_data_file = './fonts/5by7.regular.dict.json'
 font_data_file = './fonts/5by7.regular.bytes.json'
 
-if use_serial: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
+if use_flipdot: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
 
 disp = FlipdotDisplay(display_width, display_height, panel_width)
 
@@ -59,7 +60,7 @@ def invert_horizontally():
 			else:
 				disp.display_array[irow][icol] = 1
 		disp.print()
-		if use_serial:
+		if use_flipdot:
 			disp.send_to_display(ser)
 		time.sleep(0.005)
 
@@ -131,10 +132,10 @@ while True:
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
 
 	if do_inverting:
-		should_be_inverted = math.floor(now.second/10) % 2 == 0
-		stdscr = curses.initscr()
-		stdscr.addstr(8, 60, f'{now.second} {should_be_inverted}')
-		stdscr.refresh()
+		should_be_inverted = math.floor((now.hour * 60 * 60 + now.minute * 60 + now.second)/inversion_interval) % 2 == 0 ## math.floor(now.second/10) % 2 == 0
+		# stdscr = curses.initscr()
+		# stdscr.addstr(8, 60, f'{now.second} {should_be_inverted}')
+		# stdscr.refresh()
 		if is_inverted:
 			disp.invert()
 		if should_be_inverted != is_inverted:
@@ -155,7 +156,7 @@ while True:
 	for p in packets:
 		p.append(0x8f) # end of frame
 
-	if use_serial:
+	if use_flipdot:
 		for p in packets:
 			ser.write(p)
 
@@ -164,5 +165,5 @@ while True:
 if show_debug:
 	curses.endwin()
 
-if use_serial: 
+if use_flipdot: 
 	ser.close()
