@@ -47,6 +47,14 @@ class FlipdotDisplay:
 				row.append(0)
 			self.display_array.append(row)        
 	
+	def invert(self):
+		for irow in range(self.display_height):
+			for icol in range(self.display_width):
+				if self.display_array[irow][icol] > 0.1:
+					self.display_array[irow][icol] = 0  
+				else:
+					self.display_array[irow][icol] = 1
+
 	def print(self):
 		text_display = str(self).split('\n')
 		stdscr = curses.initscr()

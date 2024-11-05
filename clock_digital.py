@@ -10,13 +10,15 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = True
+use_serial = False
 show_debug = True
-add_weekday = True
-add_year_part = True
-add_month_part = True
+add_weekday = False
+add_year_part = False
+add_month_part = False
 add_hour_stripe = False
 add_hour_bar = False
+do_inverting = True 
+is_inverted = False
 
 panel_width = 28
 display_width = panel_width * 2
@@ -48,6 +50,18 @@ def convert_to_pixel_range(part, width):
 	else:
 		high = min(main + w_half, display_width-1)
 	return low, high+1
+
+def invert_horizontally():
+	for icol in range(disp.display_width):
+		for irow in range(disp.display_height):
+			if disp.display_array[irow][icol] > 0.1:
+				disp.display_array[irow][icol] = 0  
+			else:
+				disp.display_array[irow][icol] = 1
+		disp.print()
+		if use_serial:
+			disp.send_to_display(ser)
+		time.sleep(0.005)
 
 hour_ind = 1
 while True:
@@ -109,11 +123,23 @@ while True:
 
 	## add hour_bar
 	if add_hour_bar:
-		hour_part = (now.hour * 60 + now.minute) / 24 / 60
+		# hour_part = (now.hour * 60 + now.minute) / 24 / 60   ### part of day
+		hour_part = now.second / 60 ### part of hour
 		hour_pix = convert_to_pixel_val(hour_part, disp.display_width)
 		for icol in range(hour_pix):
 			for irow in range(7):
 				disp.display_array[irow][icol] = 1 - disp.display_array[irow][icol]
+
+	if do_inverting:
+		should_be_inverted = math.floor(now.second/10) % 2 == 0
+		stdscr = curses.initscr()
+		stdscr.addstr(8, 60, f'{now.second} {should_be_inverted}')
+		stdscr.refresh()
+		if is_inverted:
+			disp.invert()
+		if should_be_inverted != is_inverted:
+			invert_horizontally()
+			is_inverted = not is_inverted
 
 	if show_debug: 
 		disp.print()
