@@ -18,7 +18,7 @@ add_month_part = False
 add_hour_stripe = False
 add_hour_bar = False
 do_inverting = True 
-inversion_interval = 20   ### TODO *60 # seconds
+inversion_interval = 20 *60 # seconds
 is_inverted = False
 
 panel_width = 28
@@ -62,7 +62,7 @@ def invert_horizontally():
 		disp.print()
 		if use_flipdot:
 			disp.send_to_display(ser)
-		time.sleep(0.005)
+		time.sleep(0.001)
 
 hour_ind = 1
 while True:
