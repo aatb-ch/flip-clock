@@ -10,8 +10,10 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_flipdot = True
+use_flipdot = False
+use_graphical = True
 show_debug = True
+
 add_weekday = False
 add_year_part = False
 add_month_part = False
@@ -31,7 +33,7 @@ font_data_file = './fonts/5by7.regular.bytes.json'
 
 if use_flipdot: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
 
-disp = FlipdotDisplay(display_width, display_height, panel_width)
+disp = FlipdotDisplay(display_width, display_height, panel_width, graphical=use_graphical)
 
 ## load font data
 with open(font_data_file, 'r') as inp:
@@ -157,20 +159,23 @@ while True:
 	if show_debug: 
 		disp.print()
 
-	packets = [bytearray(), bytearray()]
-	for i, p in enumerate(packets):
-		p.append(0x80) # start frame
-		p.append(0x83) # display data
-		p.append(i) # module id
+	if use_flipdot: disp.send_to_display(ser)
+	if use_graphical: disp.send_to_graphical()
 
-	packets = disp.to_bytes(packets)
+	# packets = [bytearray(), bytearray()]
+	# for i, p in enumerate(packets):
+	# 	p.append(0x80) # start frame
+	# 	p.append(0x83) # display data
+	# 	p.append(i) # module id
 
-	for p in packets:
-		p.append(0x8f) # end of frame
+	# packets = disp.to_bytes(packets)
 
-	if use_flipdot:
-		for p in packets:
-			ser.write(p)
+	# for p in packets:
+	# 	p.append(0x8f) # end of frame
+
+	# if use_flipdot:
+	# 	for p in packets:
+	# 		ser.write(p)
 
 	time.sleep(1.0)
 
