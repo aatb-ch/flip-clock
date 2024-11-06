@@ -10,9 +10,9 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_flipdot = False
-use_graphical = True
-show_debug = True
+use_flipdot = True
+use_graphical = False
+use_text = True
 
 add_weekday = False
 add_year_part = False
@@ -156,30 +156,12 @@ while True:
 			irow, icol = divmod(i, disp.display_width)
 			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 
-	if show_debug: 
+	if use_text: 
 		disp.print()
-
-	if use_flipdot: disp.send_to_display(ser)
-	if use_graphical: disp.send_to_graphical()
-
-	# packets = [bytearray(), bytearray()]
-	# for i, p in enumerate(packets):
-	# 	p.append(0x80) # start frame
-	# 	p.append(0x83) # display data
-	# 	p.append(i) # module id
-
-	# packets = disp.to_bytes(packets)
-
-	# for p in packets:
-	# 	p.append(0x8f) # end of frame
-
-	# if use_flipdot:
-	# 	for p in packets:
-	# 		ser.write(p)
 
 	time.sleep(1.0)
 
-if show_debug:
+if use_text:
 	curses.endwin()
 
 if use_flipdot: 
