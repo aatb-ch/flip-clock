@@ -10,7 +10,8 @@ import math
 from flipdot_display import FlipdotDisplay
 
 use_serial = True
-show_debug = True
+use_text = True
+use_graphical = False
 
 period = 10 # secs
 
@@ -24,7 +25,7 @@ def pdf(x, mu=0.0, sigma=1.0):     ### gaussian distribution - not normalized - 
 
 if use_serial: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
 
-disp = FlipdotDisplay(display_width, display_height, panel_width)
+disp = FlipdotDisplay(display_width, display_height, panel_width, graphical=use_graphical)
 
 def approximate_prob(p, arr):
 	ntries = 10
@@ -62,12 +63,13 @@ while True:
 		for j in range(disp.display_height):
 			disp.display_array[j][i] = arr[j]
 
-	disp.print()
-	disp.send_to_display(ser)
+	if use_text: disp.print()
+	if use_serial: disp.send_to_display(ser)
+	if use_graphical: disp.send_to_graphical()
 
 	time.sleep(0.1)
 
-if show_debug:
+if use_text:
 	curses.endwin()
 
 if use_serial: 
