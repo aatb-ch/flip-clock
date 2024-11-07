@@ -159,6 +159,9 @@ while True:
 	if use_text: 
 		disp.print()
 
+	if use_flipdot:
+		disp.send_to_display(ser)
+
 	time.sleep(1.0)
 
 if use_text:
