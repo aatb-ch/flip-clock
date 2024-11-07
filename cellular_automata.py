@@ -8,9 +8,9 @@ import math
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
-use_graphical = True
+use_graphical = False
 
 period = 10 # secs
 
@@ -22,9 +22,9 @@ if use_serial: ser = serial.Serial('/dev/serial0', 19200)  # open serial port
 
 disp = FlipdotDisplay(display_width, display_height, panel_width, graphical=use_graphical)
 
-# CA_RULE = 30 # class 3
-# CA_SIZE = 256 # 56 for the rules with 'holes'
-# CA_START_BIT = round(disp.display_width/2)
+CA_RULE = 30 # class 3
+CA_SIZE = 256 # 56 for the rules with 'holes'
+CA_START_BIT = round(disp.display_width/2)
 
 # CA_RULE = 90 # sierpinski
 # CA_SIZE = 56 # 56 for the rules with 'holes'
