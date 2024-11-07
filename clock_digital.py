@@ -14,15 +14,15 @@ use_flipdot = True
 use_graphical = False
 use_text = True
 
-add_weekday = False
-add_year_part = False
-add_month_part = False
-add_hour_stripe = False
-add_hour_bar = False
-do_inverting = False 
+add_weekday = False     # add vertical bar for day of week
+add_year_part = False   # add vertical bar for part of year
+add_month_part = False  # add vertical bar for part of month
+add_hour_stripe = False # add an inverting stripe in the background moving horizontally
+add_hour_bar = False    # add a growing inverting horizontal background bar
+do_inverting = True     # invert clock after inversion_interval
 inversion_interval = 20 *60 # seconds
 is_inverted = False
-add_day_dots = True
+add_day_dots = False    # add dots as inverting background one by one over time
 
 panel_width = 28
 display_width = panel_width * 2
