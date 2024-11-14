@@ -59,9 +59,9 @@ def invert_horizontally():
 	for icol in range(disp.display_width):
 		for irow in range(disp.display_height):
 			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
-		disp.print()
-		if use_flipdot:
-			disp.send_to_display(ser)
+		if use_text: disp.print()
+		if use_flipdot: disp.send_to_display(ser)
+		if use_graphical: disp.send_to_graphical()
 		time.sleep(0.001)
 
 def invert_value(x):
@@ -161,6 +161,9 @@ while True:
 
 	if use_flipdot:
 		disp.send_to_display(ser)
+
+	if use_graphical:
+		disp.send_to_graphical()
 
 	time.sleep(1.0)
 
