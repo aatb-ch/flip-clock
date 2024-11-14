@@ -12,7 +12,7 @@ CORNER_TR = chr(0x2510) # corner tr
 CORNER_BL = chr(0x2514) # corner bl
 CORNER_BR = chr(0x2518) # corner br
 
-TURTLE_TILE = 30
+TURTLE_TILE = 10
 TURTLE_DOTSIZE = 0.925 * TURTLE_TILE
 MARGIN = TURTLE_TILE * 2
 TURTLE_BGCOLOR = '#111111'
@@ -52,7 +52,7 @@ class FlipdotDisplay:
 			self.screen.bgcolor(TURTLE_BGCOLOR)
 			self.screen.setup(TURTLE_SCREEN_WIDTH + MARGIN, TURTLE_SCREEN_HEIGHT + MARGIN, startx=window_offset, starty=window_offset)
 
-			self.turtle = turtle.Turtle(visible=True)
+			self.turtle = turtle.Turtle(visible=False)
 			self.turtle.penup()
 			self.turtle.color(TURTLE_FGCOLOR)
 			# self.screen.tracer(False)
