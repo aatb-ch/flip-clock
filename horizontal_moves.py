@@ -96,7 +96,7 @@ use_graphical = False
 
 panel_width = 28
 display_width = panel_width * 2
-display_height = display_width # 7
+display_height = 7 # display_width # 7
 
 n_blobs = 4 * display_height
 rand_change_prob = 0.05
@@ -131,7 +131,7 @@ while True:
 	if use_graphical: disp.send_to_graphical()
 	if use_serial: disp.send_to_display(ser)
 
-	time.sleep(0.005)
+	time.sleep(0.05)
 
 if show_debug:
 	curses.endwin()
