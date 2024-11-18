@@ -94,6 +94,7 @@ while True:
 
 	if show_debug: disp.print()
 	if use_graphical: disp.send_to_graphical()
+	if use_serial: disp.send_to_display(ser)
 
 	# print('------------')
 	# for ib, b in enumerate(blops):
