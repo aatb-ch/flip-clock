@@ -62,13 +62,13 @@ class Blop:
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = False
-use_graphical = True
+use_graphical = False
 
 panel_width = 28
 display_width = panel_width * 2
-display_height = display_width # 7
+display_height = 7 # display_width # 7
 
 directions = [(-1, -1), (-1, 0), (-1, 1),
 			  (0, -1), (0, 1),
