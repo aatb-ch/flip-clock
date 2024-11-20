@@ -10,7 +10,7 @@ import curses
 
 from flipdot_display import FlipdotDisplay
 
-use_serial = False
+use_serial = True
 show_debug = True
 
 panel_width = 28
