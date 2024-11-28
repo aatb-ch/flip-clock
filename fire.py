@@ -8,8 +8,8 @@ from copy import deepcopy
 
 from flipdot_display import FlipdotDisplay
 
-use_flipdot = False
-use_graphical = True
+use_flipdot = True
+use_graphical = False
 use_text = False
 
 panel_width = 28
