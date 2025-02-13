@@ -26,7 +26,7 @@ add_day_dots = False    # add dots as inverting background one by one over time
 
 add_alarm = True        # special action ...
 alarm_time = 17*60*60 + 30*60 # 17:30 in seconds
-alarm_time = 17*60*60 + 53*60 # 17:30 in seconds
+alarm_time = 18*60*60 + 58*60 # 17:30 in seconds
 
 panel_width = 28
 display_width = panel_width * 2
@@ -68,11 +68,11 @@ def invert_horizontally(delay=0.001):
 		if use_graphical: disp.send_to_graphical()
 		time.sleep(delay)
 
-def special_action(delay=0.1):
+def special_action(delay=0.002):
 	action_repeat = 2
 	pattern_width = 7
 	pattern_repeat = 12
-	times_pattern_repeat = 6
+	times_pattern_repeat = 2
 	for iaction in range(action_repeat):
 		for ianim in range(-pattern_width, disp.display_width + pattern_width + times_pattern_repeat * pattern_repeat):
 			to_flip = []
@@ -92,7 +92,7 @@ def special_action(delay=0.1):
 				disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 
 			time.sleep(delay)
-		
+
 		# backwards
 		for ianim in range(disp.display_width + pattern_width + times_pattern_repeat * pattern_repeat, -pattern_width, -1):
 			to_flip = []
@@ -197,13 +197,13 @@ while True:
 		if should_be_inverted != is_inverted:
 			invert_horizontally()
 			is_inverted = not is_inverted
-	
+
 	if add_alarm:
-		if now.second % 10 == 0:
+		# if now.second % 10 == 0:
+		#	special_action()
+		if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
+			print('alarm')
 			special_action()
-		# if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
-		# 	invert_horizontally(0.01)
-		# 	invert_horizontally(0.01)
 
 	if add_day_dots:
 		# secs = now.hour * 60 * 60 + now.minute * 60 + now.second
