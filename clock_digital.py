@@ -25,8 +25,7 @@ is_inverted = False
 add_day_dots = False    # add dots as inverting background one by one over time
 
 add_alarm = True        # special action ...
-alarm_time = 17*60*60 + 30*60 # 17:30 in seconds
-alarm_time = 18*60*60 + 58*60 # 17:30 in seconds
+alarm_time = 17 *60*60 + 30 *60 # 17:30 in seconds
 
 panel_width = 28
 display_width = panel_width * 2
@@ -199,11 +198,10 @@ while True:
 			is_inverted = not is_inverted
 
 	if add_alarm:
-		# if now.second % 10 == 0:
-		#	special_action()
-		if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
-			print('alarm')
-			special_action()
+		if now.weekday() < 5:
+			if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
+				# print('alarm')
+				special_action()
 
 	if add_day_dots:
 		# secs = now.hour * 60 * 60 + now.minute * 60 + now.second
