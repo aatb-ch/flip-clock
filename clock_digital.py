@@ -10,9 +10,9 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_flipdot = False
-use_graphical = True
-use_text = True
+use_flipdot = True
+use_graphical = False
+use_text = False
 
 add_weekday = False     # add vertical bar for day of week
 add_year_part = False   # add vertical bar for part of year
@@ -69,43 +69,49 @@ def invert_horizontally(delay=0.001):
 		time.sleep(delay)
 
 def special_action(delay=0.001):
-	width = 7
-	for ianim in range(-width, disp.display_width + width):
-		to_flip = []
-		for icol in range(disp.display_width):
-			for irow in range(disp.display_height):
-				irow_mod = abs(irow - 3)
-				if icol+irow_mod > ianim and icol+irow_mod < ianim + width:
-					to_flip.append((irow, icol))
-					disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
-		if use_text: disp.print()
-		if use_flipdot: disp.send_to_display(ser)
-		if use_graphical: disp.send_to_graphical()
+	action_repeat = 2
+	pattern_width = 7
+	pattern_repeat = 15
+	times_pattern_repeat = 6
+	for iaction in range(action_repeat):
+		for ianim in range(-pattern_width, disp.display_width + pattern_width + times_pattern_repeat * pattern_repeat):
+			to_flip = []
+			for icol in range(disp.display_width):
+				for irow in range(disp.display_height):
+					irow_mod = abs(irow - 3)
+					for irepeat in range(-times_pattern_repeat, 0):
+						if icol+irow_mod > ianim + irepeat*pattern_repeat and icol+irow_mod < ianim + irepeat*pattern_repeat + pattern_width:
+							to_flip.append((irow, icol))
+							disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+			if use_text: disp.print()
+			if use_flipdot: disp.send_to_display(ser)
+			if use_graphical: disp.send_to_graphical()
 
-		# revert
-		for irow, icol in to_flip:
-			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+			# revert
+			for irow, icol in to_flip:
+				disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 
-		time.sleep(delay)
-	
-	# backwards
-	for ianim in range(disp.display_width + width, -width, -1):
-		to_flip = []
-		for icol in range(disp.display_width):
-			for irow in range(disp.display_height):
-				irow_mod = 3 - abs(irow - 3)
-				if icol+irow_mod > ianim and icol+irow_mod < ianim + width:
-					to_flip.append((irow, icol))
-					disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
-		if use_text: disp.print()
-		if use_flipdot: disp.send_to_display(ser)
-		if use_graphical: disp.send_to_graphical()
+			time.sleep(delay)
+		
+		# backwards
+		for ianim in range(disp.display_width + pattern_width + times_pattern_repeat * pattern_repeat, -pattern_width, -1):
+			to_flip = []
+			for icol in range(disp.display_width):
+				for irow in range(disp.display_height):
+					irow_mod = 3 - abs(irow - 3)
+					for irepeat in range(-times_pattern_repeat, 0):
+						if icol+irow_mod > ianim + irepeat*pattern_repeat and icol+irow_mod < ianim + irepeat*pattern_repeat + pattern_width:
+							to_flip.append((irow, icol))
+							disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+			if use_text: disp.print()
+			if use_flipdot: disp.send_to_display(ser)
+			if use_graphical: disp.send_to_graphical()
 
-		# revert
-		for irow, icol in to_flip:
-			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+			# revert
+			for irow, icol in to_flip:
+				disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 
-		time.sleep(delay)
+			time.sleep(delay)
 
 
 def invert_value(x):
@@ -193,7 +199,7 @@ while True:
 			is_inverted = not is_inverted
 	
 	if add_alarm:
-		if now.second % 5 == 0:
+		if now.second % 10 == 0:
 			special_action()
 		# if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
 		# 	invert_horizontally(0.01)
