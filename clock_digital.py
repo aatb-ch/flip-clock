@@ -68,10 +68,10 @@ def invert_horizontally(delay=0.001):
 		if use_graphical: disp.send_to_graphical()
 		time.sleep(delay)
 
-def special_action(delay=0.001):
+def special_action(delay=0.1):
 	action_repeat = 2
 	pattern_width = 7
-	pattern_repeat = 15
+	pattern_repeat = 12
 	times_pattern_repeat = 6
 	for iaction in range(action_repeat):
 		for ianim in range(-pattern_width, disp.display_width + pattern_width + times_pattern_repeat * pattern_repeat):
