@@ -10,8 +10,8 @@ import json
 
 from flipdot_display import FlipdotDisplay
 
-use_flipdot = True
-use_graphical = False
+use_flipdot = False
+use_graphical = True
 use_text = True
 
 add_weekday = False     # add vertical bar for day of week
@@ -23,6 +23,10 @@ do_inverting = True     # invert clock after inversion_interval
 inversion_interval = 20 *60 # seconds
 is_inverted = False
 add_day_dots = False    # add dots as inverting background one by one over time
+
+add_alarm = True        # special action ...
+alarm_time = 17*60*60 + 30*60 # 17:30 in seconds
+alarm_time = 17*60*60 + 53*60 # 17:30 in seconds
 
 panel_width = 28
 display_width = panel_width * 2
@@ -55,14 +59,54 @@ def convert_to_pixel_range(part, width):
 		high = min(main + w_half, display_width-1)
 	return low, high+1
 
-def invert_horizontally():
+def invert_horizontally(delay=0.001):
 	for icol in range(disp.display_width):
 		for irow in range(disp.display_height):
 			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
 		if use_text: disp.print()
 		if use_flipdot: disp.send_to_display(ser)
 		if use_graphical: disp.send_to_graphical()
-		time.sleep(0.001)
+		time.sleep(delay)
+
+def special_action(delay=0.001):
+	width = 7
+	for ianim in range(-width, disp.display_width + width):
+		to_flip = []
+		for icol in range(disp.display_width):
+			for irow in range(disp.display_height):
+				irow_mod = abs(irow - 3)
+				if icol+irow_mod > ianim and icol+irow_mod < ianim + width:
+					to_flip.append((irow, icol))
+					disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+		if use_text: disp.print()
+		if use_flipdot: disp.send_to_display(ser)
+		if use_graphical: disp.send_to_graphical()
+
+		# revert
+		for irow, icol in to_flip:
+			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+
+		time.sleep(delay)
+	
+	# backwards
+	for ianim in range(disp.display_width + width, -width, -1):
+		to_flip = []
+		for icol in range(disp.display_width):
+			for irow in range(disp.display_height):
+				irow_mod = 3 - abs(irow - 3)
+				if icol+irow_mod > ianim and icol+irow_mod < ianim + width:
+					to_flip.append((irow, icol))
+					disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+		if use_text: disp.print()
+		if use_flipdot: disp.send_to_display(ser)
+		if use_graphical: disp.send_to_graphical()
+
+		# revert
+		for irow, icol in to_flip:
+			disp.display_array[irow][icol] = invert_value(disp.display_array[irow][icol])
+
+		time.sleep(delay)
+
 
 def invert_value(x):
 	if x > 0.1:
@@ -138,6 +182,7 @@ while True:
 
 	if do_inverting:
 		should_be_inverted = math.floor((now.hour * 60 * 60 + now.minute * 60 + now.second)/inversion_interval) % 2 == 0 ## math.floor(now.second/10) % 2 == 0
+		# should_be_inverted = now.second % 10 == 0
 		# stdscr = curses.initscr()
 		# stdscr.addstr(8, 60, f'{now.second} {should_be_inverted}')
 		# stdscr.refresh()
@@ -147,6 +192,13 @@ while True:
 			invert_horizontally()
 			is_inverted = not is_inverted
 	
+	if add_alarm:
+		if now.second % 5 == 0:
+			special_action()
+		# if now.hour * 60 * 60 + now.minute * 60 + now.second == alarm_time:
+		# 	invert_horizontally(0.01)
+		# 	invert_horizontally(0.01)
+
 	if add_day_dots:
 		# secs = now.hour * 60 * 60 + now.minute * 60 + now.second
 		# secs_part = convert_to_pixel_val(secs / 86400, disp.display_height * disp.display_width)
